@@ -1,5 +1,26 @@
 /*! project-name v0.0.1 | (c) 2020 YOUR NAME | MIT License | http://link-to-your-git-repo.com */
 /*************************************/
+/* Listen to D3 appending svg        */
+/*************************************/
+let targetNode = document.getElementById('visualization');
+let config = { childList: true };
+
+let callback = function(mutationsList) {
+  let i = 0;
+  for(let mutation of mutationsList) {
+    if (mutation.type == 'childList') {
+      i = i + 1;
+    }
+    if (i === 1) {
+      document.getElementById('visualization-container').classList.remove('loading');
+    }
+  }
+};
+
+let observer = new MutationObserver(callback);
+observer.observe(targetNode, config);
+
+/*************************************/
 /* Initialize variables              */
 /*************************************/
 
