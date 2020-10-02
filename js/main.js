@@ -65,7 +65,7 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
     .data(topSongs)
     .enter()
     .append('div')
-      .attr('class', 'viz-container');
+      .attr('class', d => 'viz-container viz-container-' + d.rank);
   let vizContainer = tracks.append('svg')
     .attr('class', d => 'track track-' + d.rank )
     .attr('width', '100%')
@@ -774,6 +774,10 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
   /* Reveal information on rollover                */
   /*                                               */
   /*************************************************/
+  document.addEventListener('click', (e) => {
+    d3.selectAll('.viz-container.visible')
+      .classed('visible', false);
+  });
   vizContainer
     .on('mouseenter', d => {
       const hoveredTrack = d.rank;
@@ -785,6 +789,12 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
     .on('mouseleave', d => {
       d3.selectAll('.track')
         .classed('hide', false);
+    })
+    .on('click', d => {
+      if (window.innerWidth <= 768) {
+        const vizContainer = d3.select('.viz-container-' + d.rank);
+        vizContainer.classed('visible', true)
+      }
     });
 
 
@@ -848,49 +858,6 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
       .attr('x', legendRadius + 104)
       .attr('y', 2 * (legendRadius - streamScale(1000)) + 5)
       .text('1000M');
-};
-
-
-
-/*************************************************/
-/* Helper functions                              */
-/*************************************************/
-
-// Convert degrees to radians
-const degreesToRadians = (angle) => {
-  return angle * Math.PI / 180;
-};
-
-// Get sizes of an svg element
-const getSizes = (id) => {
-  return document.getElementById(id).getBBox();
-};
-
-// Wrap text - Function originally written by Mike Bostocks
-const wrap = (text, width) => {
-  text.each((function() {
-    let text = d3.select(this),
-        words = text.text().split(/\s+/).reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = 1.1, // ems
-        x = text.attr("x"),
-        y = text.attr("y"),
-        dy = parseFloat(text.attr("dy")),
-        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-    
-    while (word = words.pop()) {
-      line.push(word);
-      tspan.text(line.join(" "));
-      if (tspan.node().getComputedTextLength() > width) {
-        line.pop();
-        tspan.text(line.join(" "));
-        line = [word];
-        tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-      }
-    }
-  }));
 };
 initializeDisplay(topSongs, artistsAppearances);
 

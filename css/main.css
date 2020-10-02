@@ -1394,7 +1394,16 @@ footer .footer-bottom .copyright {
 
 /* line 4, src/sass/components/_header.scss */
 .music-btn-container {
+  margin-top: 1em;
   text-align: right;
+}
+
+@media (max-width: 1199px) {
+  /* line 4, src/sass/components/_header.scss */
+  .music-btn-container {
+    margin-top: 30px;
+    text-align: left;
+  }
 }
 
 /* line 2, src/sass/components/_info.scss */
@@ -1477,8 +1486,8 @@ footer .footer-bottom .copyright {
   padding-top: 10px;
 }
 
-/* line 62, src/sass/components/_info.scss */
-.viz-container:hover .info-supplement, .viz-container:focus .info-supplement {
+/* line 63, src/sass/components/_info.scss */
+.viz-container:hover .info-supplement, .viz-container:focus .info-supplement, .viz-container.visible .info-supplement {
   padding-top: 20px;
   padding-bottom: 20px;
   max-height: 250px;
