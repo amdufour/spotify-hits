@@ -34,30 +34,20 @@ const infoYPosition = 220;
 /* Load data                         */
 /*************************************/
 
-let promises = [];
-promises.push(d3.csv('../data/top_streamed_songs.csv'));
-promises.push(d3.csv('../data/artists_appearances_count.csv'));
-Promise.all(promises).then(data => {
-  topSongs = data[0];
-  artistsAppearances = data[1];
-
-  // Format numbers properly
-  topSongs.forEach(d => {
-    d.acous = +d.acous;
-    d.bpm = +d.bpm;
-    d.dB = +d.dB;
-    d.dnce = +d.dnce;
-    d.dur = +d.dur;
-    d.live = +d.live;
-    d.nrgy = +d.nrgy;
-    d.pop = +d.pop;
-    d.rank = +d.rank;
-    d.spch = +d.spch;
-    d.streams_millions = +d.streams_millions;
-    d.val = +d.val;
-  });
-
-  initializeDisplay(topSongs, artistsAppearances);
+// Format numbers properly
+topSongs.forEach(d => {
+  d.acous = +d.acous;
+  d.bpm = +d.bpm;
+  d.dB = +d.dB;
+  d.dnce = +d.dnce;
+  d.dur = +d.dur;
+  d.live = +d.live;
+  d.nrgy = +d.nrgy;
+  d.pop = +d.pop;
+  d.rank = +d.rank;
+  d.spch = +d.spch;
+  d.streams_millions = +d.streams_millions;
+  d.val = +d.val;
 });
 
 
@@ -902,6 +892,7 @@ const wrap = (text, width) => {
     }
   }));
 };
+initializeDisplay(topSongs, artistsAppearances);
 
 
 
