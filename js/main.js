@@ -282,8 +282,9 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
 
   // Create linear scale to size circles (representing the number of streams)
   const streamScale = d3.scaleLinear()
-    .domain(d3.extent( topSongs, d => d.streams_millions))
-    .range([8, 43]);
+    // .domain(d3.extent( topSongs, d => d.streams_millions))
+    .domain([0, d3.max( topSongs, d => d.streams_millions)])
+    .range([0, 7000]);
 
   // Append inner circles (representing the number of streams)
   circlesContainer.append('circle')
@@ -292,7 +293,9 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
     .attr('cx', '50%')
     .attr('cy', circlesYCenter)
     .attr('r', d => {
-      return streamScale(d.streams_millions);
+      const area = streamScale(d.streams_millions);
+      const radius = Math.sqrt(area / Math.PI);
+      return radius;
     })
     .style('fill', d => {
       // Apply fill based on track genre
@@ -814,7 +817,7 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
     .on('click', d => {
       if (window.innerWidth <= 768) {
         const vizContainer = d3.select('.viz-container-' + d.rank);
-        vizContainer.classed('visible', true)
+        vizContainer.classed('visible', true);
       }
     });
 
@@ -822,7 +825,7 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
     /***************************************/
     /* Append legend for number of streams */
     /***************************************/
-    const legendRadius = streamScale(3000);
+    const legendRadius = Math.sqrt(streamScale(3000) / Math.PI);
     const legendStreams = d3.select('.legend-section-streams .legend-content').append('svg')
       .attr('id', 'legend-streams');
     
@@ -836,13 +839,13 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
       .attr('cx', legendRadius + 1)
       .attr('cy', legendRadius + 1);
     legendStreamsCircles.append('circle')
-      .attr('r', streamScale(2000))
+      .attr('r', Math.sqrt(streamScale(2000) / Math.PI))
       .attr('cx', legendRadius + 1)
-      .attr('cy', 2 * legendRadius - streamScale(2000) + 1);
+      .attr('cy', 2 * legendRadius - Math.sqrt(streamScale(2000) / Math.PI) + 1);
     legendStreamsCircles.append('circle')
-      .attr('r', streamScale(1000))
+      .attr('r', Math.sqrt(streamScale(1000) / Math.PI))
       .attr('cx', legendRadius + 1)
-      .attr('cy', 2 * legendRadius - streamScale(1000) + 1);
+      .attr('cy', 2 * legendRadius - Math.sqrt(streamScale(1000) / Math.PI) + 1);
 
     const legendStreamsLines = legendStreams.append('g')
       .attr('class', 'legend-streams-lines')
@@ -857,13 +860,13 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
     legendStreamsLines.append('line')
       .attr('x1', legendRadius + 1)
       .attr('x2', legendRadius + 101)
-      .attr('y1', 2 * (legendRadius - streamScale(2000)) + 1)
-      .attr('y2', 2 * (legendRadius - streamScale(2000)) + 1);
+      .attr('y1', 2 * (legendRadius - Math.sqrt(streamScale(2000) / Math.PI)) + 1)
+      .attr('y2', 2 * (legendRadius - Math.sqrt(streamScale(2000) / Math.PI)) + 1);
     legendStreamsLines.append('line')
       .attr('x1', legendRadius + 1)
       .attr('x2', legendRadius + 101)
-      .attr('y1', 2 * (legendRadius - streamScale(1000)) + 1)
-      .attr('y2', 2 * (legendRadius - streamScale(1000)) + 1);
+      .attr('y1', 2 * (legendRadius - Math.sqrt(streamScale(1000) / Math.PI)) + 1)
+      .attr('y2', 2 * (legendRadius - Math.sqrt(streamScale(1000) / Math.PI)) + 1);
 
     const legendStreamsText = legendStreams.append('g')
       .attr('class', 'legend-streams-text');
@@ -873,11 +876,11 @@ const initializeDisplay = (topSongs, artistsAppearances) => {
       .text('3000M');
     legendStreamsText.append('text')
       .attr('x', legendRadius + 104)
-      .attr('y', 2 * (legendRadius - streamScale(2000)) + 5)
+      .attr('y', 2 * (legendRadius - Math.sqrt(streamScale(2000) / Math.PI)) + 5)
       .text('2000M');
     legendStreamsText.append('text')
       .attr('x', legendRadius + 104)
-      .attr('y', 2 * (legendRadius - streamScale(1000)) + 5)
+      .attr('y', 2 * (legendRadius - Math.sqrt(streamScale(1000) / Math.PI)) + 5)
       .text('1000M');
 };
 initializeDisplay(topSongs, artistsAppearances);
